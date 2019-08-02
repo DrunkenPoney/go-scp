@@ -200,7 +200,6 @@ func (a *Client) Copy(r io.Reader, remotePath string, permissions string, size i
 			return
 		}
 	}
-	}()
 
 	go func() {
 		defer wg.Done()
