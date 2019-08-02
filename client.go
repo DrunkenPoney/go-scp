@@ -200,17 +200,17 @@ func (a *Client) Copy(r io.Reader, remotePath string, permissions string, size i
 			return
 		}
 	}
-
-	go func() {
-		defer wg.Done()
-		err := a.Session.Run(fmt.Sprintf("%s -qt %s", a.RemoteBinary, directory))
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	wg := a.scpFunc(copyFile, syncFile, errCh, 2)
+    
+    wg := a.scpFunc(copyFile, syncFile, errCh, 3)
+    
+    go func() {
+        defer wg.Done()
+        err := a.Session.Run(fmt.Sprintf("%s -qt %s", a.RemoteBinary, directory))
+        if err != nil {
+            errCh <- err
+            return
+        }
+    }()
 
 	if waitTimeout(wg, a.Timeout) {
 		return errors.New("timeout when upload files")
